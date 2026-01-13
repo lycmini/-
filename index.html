@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成績加權計算器</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --bg-color: #f5f7fa;
+        }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 { text-align: center; color: #333; margin-bottom: 25px; }
+        .input-group { 
+            margin-bottom: 15px; 
+            display: flex; 
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .label-text { font-weight: 500; color: #444; }
+        .weight-tag { 
+            font-size: 0.75em; 
+            background: #e1e8ed; 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            color: #666;
+            margin-left: 5px;
+        }
+        input { 
+            width: 80px; 
+            padding: 8px; 
+            border: 1px solid #ddd; 
+            border-radius: 6px; 
+            text-align: center;
+            font-size: 16px; /* 防止 iOS 自動放大 */
+        }
+        input:focus { border-color: var(--primary-color); outline: none; }
+        button { 
+            width: 100%; 
+            padding: 15px; 
+            background-color: var(--primary-color); 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 18px; 
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        button:active { background-color: #357abd; }
+        #result-box { 
+            margin-top: 25px; 
+            padding: 15px;
+            background: #ebf5ff;
+            border-radius: 8px;
+            text-align: center;
+            display: none; /* 初始隱藏 */
+        }
+        .result-val { font-size: 2em; color: var(--primary-color); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>成績加權計算</h2>
+        
+        <div class="input-group">
+            <span class="label-text">國文 <span class="weight-tag">x3</span></span>
+            <input type="number" id="chi" placeholder="0" min="0" max="100">
+        </div>
+        <div class="input-group">
+            <span class="label-text">英文 <span class="weight-tag">x3</span></span>
+            <input type="number" id="eng" placeholder="0" min="0" max="100">
+        </div>
+        <div class="input-group">
+            <span class="label-text">數學 <span class="weight-tag">x2</span></span>
+            <input type="number" id="math" placeholder="0" min="0" max="100">
+        </div>
+        <div class="input-group">
+            <span class="label-text">化學 <span class="weight-tag">x2</span></span>
+            <input type="number" id="chem" placeholder="0" min="0" max="100">
+        </div>
+        <div class="input-group">
+            <span class="label-text">物理 <span class="weight-tag">x1</span></span>
+            <input type="number" id="phy" placeholder="0" min="0" max="100">
+        </div>
+        <div class="input-group">
+            <span class="label-text">地科 <span class="weight-tag">x1</span></span>
+            <input type="number" id="geo" placeholder="0" min="0" max="100">
+        </div>
+
+        <button onclick="calculate()">開始計算</button>
+
+        <div id="result-box">
+            <div style="color: #666; margin-bottom: 5px;">您的加權平均為</div>
+            <div class="result-val" id="average">-</div>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            const getValue = id => parseFloat(document.getElementById(id).value) || 0;
+            
+            const scores = {
+                w3: getValue('chi') + getValue('eng'),
+                w2: getValue('math') + getValue('chem'),
+                w1: getValue('phy') + getValue('geo')
+            };
+
+            const totalScore = (scores.w3 * 3) + (scores.w2 * 2) + (scores.w1 * 1);
+            const average = totalScore / 12;
+
+            document.getElementById('result-box').style.display = 'block';
+            document.getElementById('average').innerText = average.toFixed(2);
+        }
+    </script>
+
+</body>
+</html>
